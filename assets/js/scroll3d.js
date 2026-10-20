@@ -54,9 +54,9 @@ var mm=gsap.matchMedia();
   });
 })();
 
-/* ---------- 2. Services: 3D card deck that fans out into the grid (home) ---------- */
-(function(){
-  var sec=$("#services");if(!sec)return;
+/* ---------- 2. Services + Lookbook: 3D card deck that fans out into the grid (home) ---------- */
+["services","gallery"].forEach(function(id){
+  var sec=document.getElementById(id);if(!sec)return;
   var grid=$(".svc-grid",sec);if(!grid)return;
   var cards=$$(".svc",grid);if(!cards.length)return;
   own(cards);
@@ -78,61 +78,9 @@ var mm=gsap.matchMedia();
         scrollTrigger:{trigger:c,start:"top 96%",end:"top 62%",scrub:true}});
     });
   });
-})();
+});
 
-/* ---------- 3. Lookbook: 3D carousel cylinder turned by scroll (home, desktop) ---------- */
-(function(){
-  var sec=$("#gallery"),rail=$("#rail");
-  if(!sec||!rail||!$(".look",rail))return;
-  var items=$$(".look",rail);
-  mm.add("(min-width: 1061px) and (pointer: fine)",function(){
-    rail.classList.add("cyl");rail.scrollLeft=0;
-    var ring=document.createElement("div");ring.className="cyl-ring";
-    items.forEach(function(it){it.style.transform="";ring.appendChild(it);});
-    rail.appendChild(ring);
-    var hint=document.createElement("p");hint.className="cyl-hint";hint.textContent="Keep scrolling to turn the lookbook";rail.after(hint);
-    var state={rot:0,manual:0,step:40,r:400};
-    function vis(){return items.filter(function(i){return !i.hidden;});}
-    function render(){
-      var rot=state.rot+state.manual;
-      ring.style.transform="translateZ("+(-state.r)+"px) rotateY("+rot+"deg)";
-      vis().forEach(function(it){
-        var a=((it.__a+rot)%360+540)%360-180,f=Math.cos(a*Math.PI/180);
-        it.style.filter="brightness("+(0.6+0.4*Math.max(f,0)).toFixed(3)+")";
-        it.style.pointerEvents=f>0.75?"auto":"none";
-      });
-    }
-    function layout(){
-      var v=vis(),n=Math.max(v.length,1),w=items[0].offsetWidth||220;
-      state.step=360/n;
-      state.r=n<3?w:Math.round((w/2)/Math.tan(Math.PI/n))+46;
-      v.forEach(function(it,i){it.__a=i*state.step;it.style.transform="rotateY("+it.__a+"deg) translateZ("+state.r+"px)";});
-      render();
-    }
-    layout();
-    var st=ScrollTrigger.create({trigger:sec,start:function(){return "top top+="+headerH();},end:"+=160%",pin:true,scrub:1,
-      onUpdate:function(s){state.rot=-s.progress*(360-state.step);render();}});
-    var ob=new MutationObserver(function(){state.manual=0;layout();});
-    items.forEach(function(it){ob.observe(it,{attributes:true,attributeFilter:["hidden"]});});
-    function arrow(e){
-      if(!rail.classList.contains("cyl"))return;
-      e.stopImmediatePropagation();
-      var d=Number(e.currentTarget.getAttribute("data-dir"))||1;
-      gsap.to(state,{manual:state.manual-d*state.step,duration:.8,ease:"power3.out",onUpdate:render});
-    }
-    var btns=$$('[data-rail="rail"]',sec);
-    btns.forEach(function(b){b.addEventListener("click",arrow,true);});
-    window.addEventListener("resize",layout);
-    return function(){
-      st.kill();ob.disconnect();window.removeEventListener("resize",layout);
-      btns.forEach(function(b){b.removeEventListener("click",arrow,true);});
-      items.forEach(function(it){rail.appendChild(it);it.style.transform="";it.style.filter="";it.style.pointerEvents="";});
-      ring.remove();hint.remove();rail.classList.remove("cyl");
-    };
-  });
-})();
-
-/* ---------- 4. Depth parallax and 3D entrances (all pages) ---------- */
+/* ---------- 3. Depth parallax and 3D entrances (all pages) ---------- */
 function parallax(sel,from,to,trigger){
   $$(sel).forEach(function(el){
     gsap.fromTo(el,from,Object.assign({ease:"none",scrollTrigger:{trigger:trigger?el.closest(trigger)||el:el,start:"top bottom",end:"bottom top",scrub:true}},to));
