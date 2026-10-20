@@ -10,7 +10,7 @@ var WA_BASE="https://wa.me/447311189118?text=";
 var MAPS="https://www.google.com/maps/search/?api=1&query=Sinma+Hair+And+Beauty+Garratt+Lane+Tooting+London";
 var SERVICES=["Cut & Finish","Blow Dry & Styling","Full Colour","Highlights & Balayage","Hair Treatments","Bridal & Occasion Hair","Eyebrow Threading & Tinting","Waxing","Facials","Manicure & Pedicure","Lashes & Brows"];
 var HOURS_TEXT="We're open Monday to Saturday, 10:00 AM to 7:00 PM. We're closed on Sundays.";
-var PRICE_TEXT="Our final price list is being added — message us on WhatsApp and we'll confirm the price for your service right away.";
+var PRICE_TEXT="You can see all our prices in GBP on our Prices page. Prices marked \"from\" are starting prices, and we'll confirm your exact price on WhatsApp before your appointment.";
 function wa(text){return WA_BASE+encodeURIComponent(text);}
 
 /* ---------- Dates and times (London) ---------- */
@@ -149,7 +149,7 @@ function respond(raw){
   var t=raw.toLowerCase();
   if(/chat on whatsapp|^whatsapp$/.test(t)){botSay("Of course. Tap below to open WhatsApp with a message ready to send, or call us on "+PHONE_DISPLAY+".",[{label:"Open WhatsApp",href:wa("Hello Sinma Hair And Beauty, I'd like to ask about an appointment")},{label:"Call "+PHONE_DISPLAY,href:"tel:+447311189118",alt:true}],MAIN_CHIPS);return;}
   if(/\b(book|booking|appointment|appoint|reserve|slot)\b/.test(t)){startBooking();return;}
-  if(/(price|prices|cost|how much|£|charge|fee|quote|expensive|cheap)/.test(t)){botSay(PRICE_TEXT,[{label:"Ask for a price on WhatsApp",href:wa("Hello Sinma Hair And Beauty, could you confirm the price for: ")}],MAIN_CHIPS);return;}
+  if(/(price|prices|cost|how much|£|charge|fee|quote|expensive|cheap)/.test(t)){botSay(PRICE_TEXT,[{label:"See our prices",href:"prices.html"},{label:"Ask for a price on WhatsApp",href:wa("Hello Sinma Hair And Beauty, could you confirm the price for: ")}],MAIN_CHIPS);return;}
   if(/\b(open|opening|hours?|timings?|close|closes|closing|closed|what time|sunday|sundays|today|tomorrow|weekend)\b/.test(t)){botSay(HOURS_TEXT,null,MAIN_CHIPS);return;}
   if(/\b(where|address|location|located|directions?|map|postcode|find you|get there|garratt|tooting)\b|where are you/.test(t)){botSay("You'll find us on Garratt Lane, Tooting, London.",[{label:"Open in Google Maps",href:MAPS}],MAIN_CHIPS);return;}
   if(/(service|menu|treatment|offer|do you do|haircut|hair cut|cut|colour|color|balayage|highlight|blow ?dry|bridal|occasion|thread|tint|brow|wax|facial|manicure|pedicure|nail|lash|styling)/.test(t)){botSay("Here's what we offer:\n• "+SERVICES.join("\n• ")+"\n\nWould you like to book one of these?",null,["Book an appointment","Opening hours","Chat on WhatsApp"]);return;}
