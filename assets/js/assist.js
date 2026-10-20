@@ -100,17 +100,6 @@ function renderAutomation(container,b){
 }
 window.SinmaAutomation={render:renderAutomation};
 
-/* Demo mockup in "Your Website Works While You Work" (sample: Emily Carter), cycles while on screen */
-(function(){
-  var host=document.querySelector("[data-wa-demo]");if(!host)return;
-  var n=nowLondon(),iso=addDays(n.iso,3);if(dow(iso)===0)iso=addDays(iso,1);
-  var sample={name:"Emily Carter",service:"Highlights & Balayage",iso:iso,mins:14*60+30};
-  var shell=phoneShell();host.appendChild(shell.phone);
-  var stop=null;
-  function start(){if(!stop)stop=play(shell.body,messagesFor(sample),{loop:!reduced});}
-  function halt(){if(stop){stop();stop=null;}}
-  if("IntersectionObserver" in window){new IntersectionObserver(function(es){es[0].isIntersecting?start():halt();}).observe(host);}else start();
-})();
 
 /* =====================================================================
    SYSTEM 1 — 24/7 Assistant
