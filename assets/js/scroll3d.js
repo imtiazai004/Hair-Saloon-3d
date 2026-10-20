@@ -50,7 +50,8 @@ var mm=gsap.matchMedia();
     /* Photo stays in place; it only zooms in gently inside its frame */
     var img=photo?photo.querySelector("img"):null;
     if(img)tl.fromTo(img,{scale:1},{scale:d?1.12:1.08,transformOrigin:"50% 30%",ease:"none"},0);
-    tl.to(copy,{y:d?-110:-50,z:d?140:60,transformPerspective:1000,ease:"none"},0);
+    /* Hero text also stays in place and zooms in gently, like the photo */
+    tl.fromTo(copy,{scale:1},{scale:d?1.1:1.06,transformOrigin:"0% 40%",ease:"none"},0);
     if(script)tl.to(script,{y:d?-170:-80,rotation:-22,ease:"none"},0);
     return function(){if(canvas)canvas.__boost=0;};
   });
@@ -82,58 +83,7 @@ var mm=gsap.matchMedia();
   });
 });
 
-/* ---------- 4. Exploding headlines ---------- */
-(function(){
-  var R=gsap.utils.random;
-  /* Split a heading into word wrappers and letter spans, keeping <em> styling; screen readers keep the plain text */
-  function split(h){
-    if(h.__chars)return h.__chars;
-    h.setAttribute("aria-label",h.textContent.replace(/\s+/g," ").trim());
-    var chars=[];
-    (function walk(node){
-      Array.prototype.slice.call(node.childNodes).forEach(function(n){
-        if(n.nodeType===3){
-          var frag=document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach(function(part){
-            if(!part)return;
-            if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(" "));return;}
-            var w=document.createElement("span");w.className="xw";w.setAttribute("aria-hidden","true");
-            part.split("").forEach(function(c){var s=document.createElement("span");s.className="xc";s.textContent=c;w.appendChild(s);chars.push(s);});
-            frag.appendChild(w);
-          });
-          n.parentNode.replaceChild(frag,n);
-        }else if(n.nodeType===1&&n.tagName!=="BR"){walk(n);}
-      });
-    })(h);
-    h.__chars=chars;return chars;
-  }
-  function burst(mob){
-    var k=mob?.45:1;
-    return {x:function(){return R(-320,320)*k;},y:function(){return R(-220,220)*k;},z:function(){return R(-500,420)*k;},
-      rotationX:function(){return R(-200,200);},rotationY:function(){return R(-200,200);},rotation:function(){return R(-90,90);},opacity:0};
-  }
-  var HOME={x:0,y:0,z:0,rotationX:0,rotationY:0,rotation:0,opacity:1};
-  mm.add({desk:"(min-width: 761px)",mob:"(max-width: 760px)"},function(ctx){
-    var mob=ctx.conditions.mob;
-    /* Headlines visible on arrival (hero, page banners): start whole, explode as you scroll away */
-    $$("#hero h1, .page-hero h1").forEach(function(h){
-      var c=split(h),host=h.closest("section");
-      var tl=gsap.timeline({scrollTrigger:{trigger:host,start:"top top",end:"bottom top",scrub:.6}});
-      tl.to({}, {duration:.35})
-        .to(c,Object.assign({ease:"power2.in",duration:1,stagger:{each:.012,from:"center"}},burst(mob)));
-    });
-    /* Section headlines: fly together as they arrive, hold, then explode as they leave */
-    $$(".head-c h2, .look-head h2, .about-copy h2, .band h2, .cat-copy h2, .visit h2").forEach(function(h){
-      var c=split(h);
-      var tl=gsap.timeline({scrollTrigger:{trigger:h,start:"top 100%",end:"bottom 0%",scrub:.6}});
-      tl.fromTo(c,burst(mob),Object.assign({ease:"power3.out",duration:1,stagger:{each:.012,from:"random"}},HOME))
-        .to({}, {duration:1.6})
-        .to(c,Object.assign({ease:"power2.in",duration:1,stagger:{each:.012,from:"center"}},burst(mob)));
-    });
-  });
-})();
-
-/* ---------- 5. Depth parallax and 3D entrances (all pages) ---------- */
+/* ---------- 3. Depth parallax and 3D entrances (all pages) ---------- */
 function parallax(sel,from,to,trigger){
   $$(sel).forEach(function(el){
     gsap.fromTo(el,from,Object.assign({ease:"none",scrollTrigger:{trigger:trigger?el.closest(trigger)||el:el,start:"top bottom",end:"bottom top",scrub:true}},to));
