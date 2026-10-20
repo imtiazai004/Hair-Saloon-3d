@@ -478,3 +478,8 @@ html.lenis{scroll-behavior:auto}
 .wa-note{display:block;margin-top:4px;font-size:.7rem;color:#7a8a85}
 .wa-typing{align-self:flex-start;display:flex;gap:5px;background:#fff;border-radius:12px;padding:10px 12px}
 @media (prefers-reduced-motion:reduce){.wa-msg{animation:none}.sa-typing span,.wa-typing span{animation:none}}
+
+/* Exploding headlines (3D version) */
+.xw{display:inline-block;white-space:nowrap;transform-style:preserve-3d}
+.xc{display:inline-block;transform-style:preserve-3d;backface-visibility:visible;will-change:transform}
+.has-scroll3d h1,.has-scroll3d h2{perspective:700px}
