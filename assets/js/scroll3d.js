@@ -122,7 +122,7 @@ function batchIn(sel,from){
     gsap.from(batch,Object.assign({transformPerspective:1000,duration:1,ease:"power3.out",stagger:.1,overwrite:true,clearProps:"transform"},from));
   }});
 }
-batchIn(".promise, .c-card",{rotateY:-35,x:-40,z:-120});
+batchIn(".promise, .c-card, .price-card",{rotateY:-35,x:-40,z:-120});
 batchIn(".masonry .look",{rotateX:-40,y:90,z:-100});
 batchIn(".rev",{rotateY:28,x:50,z:-100});
 batchIn(".feat",{rotateX:-50,y:40});

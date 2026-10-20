@@ -478,3 +478,23 @@ html.lenis{scroll-behavior:auto}
 .wa-note{display:block;margin-top:4px;font-size:.7rem;color:#7a8a85}
 .wa-typing{align-self:flex-start;display:flex;gap:5px;background:#fff;border-radius:12px;padding:10px 12px}
 @media (prefers-reduced-motion:reduce){.wa-msg{animation:none}.sa-typing span,.wa-typing span{animation:none}}
+
+/* ===== Prices page ===== */
+.price-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:clamp(24px,4vw,36px);perspective:1200px}
+.price-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(20px,3vw,28px);box-shadow:0 14px 30px -26px rgba(110,48,54,.5);transform-style:preserve-3d;transition:transform .4s;min-width:0}
+.pr-head{display:flex;gap:14px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.pr-head .feat-ico{width:52px;height:52px;flex:none}
+.pr-head h2{font-size:clamp(1.6rem,2.6vw,2rem)}
+.pr-head p{margin:2px 0 0;font-size:.9rem;color:var(--muted)}
+.pr-list{list-style:none;margin:0;padding:0}
+.pr-row{display:grid;grid-template-columns:auto minmax(20px,1fr) auto;align-items:baseline;gap:4px 10px;padding:14px 0;border-bottom:1px dashed #e4c9c2}
+.pr-row:last-child{border-bottom:0}
+.pr-name{font-weight:500;font-size:1rem}
+.pr-dots{border-bottom:2px dotted #e2c5be;transform:translateY(-4px)}
+.pr-price{font-family:var(--serif);font-size:1.3rem;font-weight:600;color:var(--rosewood);white-space:nowrap}
+.pr-price.pr-ask{font-style:italic;font-weight:500;font-size:1.05rem}
+.pr-acts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.pr-foot{margin-top:clamp(28px,4vw,40px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;background:var(--blush-2);border-radius:20px;padding:22px 24px}
+.pr-foot p{margin:0;font-size:1rem;max-width:46ch}
+@media (max-width:900px){.price-grid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:420px){.pr-row{grid-template-columns:minmax(0,1fr) auto}.pr-dots{display:none}}
