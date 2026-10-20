@@ -47,8 +47,10 @@ var mm=gsap.matchMedia();
     var d=ctx.conditions.desk;
     var tl=gsap.timeline({scrollTrigger:{trigger:hero,start:"top top",end:"bottom top",scrub:true,
       onUpdate:function(s){if(canvas)canvas.__boost=s.progress;},onLeaveBack:function(){if(canvas)canvas.__boost=0;}}});
-    tl.to(photo,{rotateX:d?10:6,rotateY:d?-9:0,z:d?-280:-140,scale:.9,transformPerspective:1200,transformOrigin:"50% 0%",ease:"none"},0)
-      .to(copy,{y:d?-110:-50,z:d?140:60,transformPerspective:1000,ease:"none"},0);
+    /* Photo stays in place; it only zooms in gently inside its frame */
+    var img=photo?photo.querySelector("img"):null;
+    if(img)tl.fromTo(img,{scale:1},{scale:d?1.12:1.08,transformOrigin:"50% 30%",ease:"none"},0);
+    tl.to(copy,{y:d?-110:-50,z:d?140:60,transformPerspective:1000,ease:"none"},0);
     if(script)tl.to(script,{y:d?-170:-80,rotation:-22,ease:"none"},0);
     return function(){if(canvas)canvas.__boost=0;};
   });
