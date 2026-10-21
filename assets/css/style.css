@@ -25,7 +25,7 @@ html{font-size:109.375%}
   --sans:"Poppins","Helvetica Neue",Arial,system-ui,sans-serif;
   --gutter:max(clamp(16px,4vw,48px),env(safe-area-inset-left,0px));
   --gutter-r:max(clamp(16px,4vw,48px),env(safe-area-inset-right,0px));
-  --header-h:76px;
+  --header-h:88px;
   --shadow:0 20px 50px -28px rgba(110,48,54,.35);
   color-scheme:light;
 }
@@ -61,12 +61,23 @@ p{margin:0}
 .btn-pink:hover{background:#f7dfd9}
 .btn.sm{min-height:42px;padding:0 20px;font-size:.9rem}
 
-/* Logo */
-.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;line-height:1}
-.logo svg{width:34px;height:34px;color:var(--rosewood);flex:none}
-.logo-txt{display:grid;gap:3px}
-.logo-name{font-family:var(--serif);font-size:1.75rem;font-weight:600;letter-spacing:.01em;color:var(--ink)}
-.logo-sub{font-size:.64rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+/* Logo: larger rose-gold foil wordmark with an embossed, raised depth */
+.logo{display:inline-flex;align-items:center;gap:12px;text-decoration:none;line-height:1}
+.logo svg{width:50px;height:50px;color:var(--rosewood);flex:none;stroke-width:1.8;filter:drop-shadow(0 1px 0 #e7b1a3) drop-shadow(0 2px 0 #6e2b33) drop-shadow(0 6px 8px rgba(110,43,51,.3))}
+.logo-txt{display:grid;gap:5px}
+.logo-name{
+  font-family:var(--serif);font-size:2.75rem;font-weight:600;letter-spacing:.03em;line-height:.9;
+  background:linear-gradient(100deg,#6e2b33 0%,#a8545a 14%,#f0c3b6 28%,#c27a72 40%,#7c3540 52%,#cf8e82 64%,#f6d6cb 76%,#a5555b 88%,#6e2b33 100%);
+  background-size:220% 100%;background-position:0% 50%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 1px 0 #9a4c52) drop-shadow(0 1px 0 #7f3a41) drop-shadow(0 1px 0 #632a31) drop-shadow(0 6px 8px rgba(110,43,51,.28));
+  animation:logo-foil 7s ease-in-out infinite;padding:0 .04em .06em 0
+}
+@keyframes logo-foil{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.logo-sub{font-size:.68rem;font-weight:500;letter-spacing:.34em;text-transform:uppercase;color:var(--rosewood);opacity:.85}
+@media (max-width:980px){.logo-name{font-size:2.35rem}.logo svg{width:44px;height:44px}}
+@media (max-width:440px){.logo{gap:9px}.logo-name{font-size:2rem}.logo svg{width:38px;height:38px}.logo-sub{font-size:.56rem;letter-spacing:.26em}}
+@media (prefers-reduced-motion:reduce){.logo-name{animation:none}}
 
 /* Header */
 .site-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(251,243,240,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(239,220,214,.7)}
@@ -231,8 +242,8 @@ p{margin:0}
 /* Footer */
 .footer{background:var(--espresso-2);color:#cdbbb7;padding-block:56px calc(36px + env(safe-area-inset-bottom,0px));font-size:.9rem}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:32px}
-.footer .logo-name{color:#fff}
-.footer .logo-sub{color:#b9a5a1}
+.footer .logo-name{background-image:linear-gradient(100deg,#c98a80 0%,#f0c3b6 22%,#fff1ea 36%,#e2a39b 52%,#f6d6cb 72%,#c98a80 100%);filter:drop-shadow(0 1px 0 #3a2324) drop-shadow(0 2px 0 #241617) drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.footer .logo-sub{color:#e2a39b}
 .footer .logo svg{color:var(--rose)}
 .foot-grid h4{margin:0 0 14px;color:#fff;font:500 .95rem var(--sans)}
 .foot-grid ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
