@@ -144,7 +144,15 @@ if(modal){
     bDate.min=londonNow().iso;bDate.max=addDays(londonNow().iso,90);
     if(!bDate.value||bDate.value<bDate.min)bDate.value=firstOpenDate();
     renderSlots();
-    if(service&&allItems().indexOf(service)>-1)bService.value=service;
+    if(service){
+      /* Price-list items that aren't in the sample menu get their own option, so the exact service is booked */
+      if(![].some.call(bService.options,function(o){return o.value===service;})){
+        var pg=bService.querySelector("optgroup[data-pl]");
+        if(!pg){pg=document.createElement("optgroup");pg.label="From our price list";pg.setAttribute("data-pl","");bService.insertBefore(pg,bService.querySelector("optgroup"));}
+        var po=document.createElement("option");po.value=service;po.textContent=service;pg.appendChild(po);
+      }
+      bService.value=service;
+    }
     confirmEl.hidden=true;form.hidden=false;modal.hidden=false;document.body.style.overflow="hidden";
     setTimeout(function(){bService.focus();},60);
   };
@@ -205,4 +213,63 @@ $$("canvas.petals").forEach(function(canvas){
   if(reduced)step(0,4);else loop();
 });
 
+})();
+
+/* ---------- Home price menu: tabs + live search ---------- */
+(function(){
+  var pm=document.querySelector("[data-pm]");if(!pm)return;
+  var list=pm.querySelector(".pm-tabs"),tabs=[].slice.call(pm.querySelectorAll(".pm-tab")),panels=[].slice.call(pm.querySelectorAll(".pm-panel")),imgs=[].slice.call(pm.querySelectorAll(".pm-photo img"));
+  var capT=pm.querySelector(".pm-cap h3"),capP=pm.querySelector(".pm-cap p"),capF=pm.querySelector(".pm-from"),capFS=capF.querySelector("strong");
+  var input=pm.querySelector(".pm-search input"),clr=pm.querySelector(".pm-clear"),res=pm.querySelector(".pm-results"),resList=res.querySelector(".pm-list"),empty=pm.querySelector(".pm-empty");
+  var cur=0,searching=false;
+  function caption(t,p,from){capT.textContent=t;capP.textContent=p;capF.hidden=!from;if(from)capFS.textContent=from;}
+  function show(i,focus){
+    cur=i;
+    tabs.forEach(function(t,k){var on=k===i;t.setAttribute("aria-selected",on?"true":"false");t.tabIndex=on?0:-1;});
+    panels.forEach(function(p,k){p.classList.remove("is-in");p.hidden=searching||k!==i;});
+    if(!searching){void panels[i].offsetWidth;panels[i].classList.add("is-in");}
+    imgs.forEach(function(m,k){m.classList.toggle("is-on",k===i);});
+    var t=tabs[i];caption(t.getAttribute("data-cat"),t.getAttribute("data-note"),t.getAttribute("data-from"));
+    if(list.scrollWidth>list.clientWidth+4){list.scrollTo({left:Math.max(0,t.offsetLeft-list.clientWidth/2+t.offsetWidth/2),behavior:"smooth"});}
+    if(focus)t.focus({preventScroll:true});
+  }
+  tabs.forEach(function(t,k){t.addEventListener("click",function(){if(searching)clearSearch(false);show(k);});});
+  list.addEventListener("keydown",function(e){
+    var k={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key],n=null;
+    if(k)n=(cur+k+tabs.length)%tabs.length;else if(e.key==="Home")n=0;else if(e.key==="End")n=tabs.length-1;
+    if(n===null)return;e.preventDefault();if(searching)clearSearch(false);show(n,true);
+  });
+  function nameWithMark(span,name,q,cat){
+    span.textContent="";var s=document.createElement("small");s.textContent=cat;span.appendChild(s);
+    var i=name.toLowerCase().indexOf(q);
+    if(i<0){span.appendChild(document.createTextNode(name));return;}
+    span.appendChild(document.createTextNode(name.slice(0,i)));
+    var m=document.createElement("mark");m.textContent=name.slice(i,i+q.length);span.appendChild(m);
+    span.appendChild(document.createTextNode(name.slice(i+q.length)));
+  }
+  function search(){
+    var q=input.value.trim().toLowerCase();clr.hidden=!input.value;
+    if(!q){if(searching)clearSearch(false);return;}
+    searching=true;pm.classList.add("is-search");
+    panels.forEach(function(p){p.hidden=true;});res.hidden=false;resList.textContent="";
+    var n=0,rows=[].slice.call(pm.querySelectorAll(".pm-panel .pm-row"));
+    /* Match service names first; only fall back to category names when no service name matches */
+    var hits=rows.filter(function(r){return r.getAttribute("data-name").toLowerCase().indexOf(q)>-1;});
+    if(!hits.length)hits=rows.filter(function(r){return r.getAttribute("data-cat").toLowerCase().indexOf(q)>-1;});
+    hits.forEach(function(row){
+      var name=row.getAttribute("data-name"),cat=row.getAttribute("data-cat");
+      var c=row.cloneNode(true);c.style.setProperty("--i",Math.min(n,10));nameWithMark(c.querySelector(".pm-name"),name,q,cat);resList.appendChild(c);n++;
+    });
+    empty.hidden=n>0;
+    caption(n?"Search results":"No matches",n?(n+(n===1?" service matches":" services match")+" “"+input.value.trim()+"”"):"Try another word, like cut, colour, wax or nails.","");
+  }
+  function clearSearch(restore){
+    searching=false;pm.classList.remove("is-search");res.hidden=true;resList.textContent="";
+    if(restore!==false){input.value="";clr.hidden=true;}
+    else{input.value="";clr.hidden=true;}
+    show(cur);
+  }
+  input.addEventListener("input",search);
+  input.addEventListener("keydown",function(e){if(e.key==="Escape"&&input.value){e.preventDefault();clearSearch();}});
+  clr.addEventListener("click",function(){clearSearch();input.focus();});
 })();

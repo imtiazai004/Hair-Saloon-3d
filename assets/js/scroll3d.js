@@ -127,6 +127,14 @@ batchIn(".masonry .look",{rotateX:-40,y:90,z:-100});
 batchIn(".rev",{rotateY:28,x:50,z:-100});
 batchIn(".feat",{rotateX:-50,y:40});
 
+/* Home price menu: the whole board tips up into place in 3D */
+var pmBoard=$(".pm");
+if(pmBoard){
+  own(pmBoard);
+  gsap.from(pmBoard,{rotateX:18,y:90,z:-140,transformPerspective:1300,transformOrigin:"50% 0%",ease:"power2.out",
+    scrollTrigger:{trigger:pmBoard,start:"top 96%",end:"top 45%",scrub:1}});
+}
+
 /* Booking band card floats forward */
 var info=$(".band .info-card");
 if(info){own(info);gsap.from(info,{rotateY:-24,rotateX:8,z:-160,x:60,transformPerspective:1200,ease:"power2.out",scrollTrigger:{trigger:".band",start:"top 85%",end:"top 25%",scrub:1}});}
