@@ -74,9 +74,16 @@ p{margin:0}
   animation:logo-foil 7s ease-in-out infinite;padding:0 .04em .06em 0
 }
 @keyframes logo-foil{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.logo-sub{font-size:.68rem;font-weight:500;letter-spacing:.34em;text-transform:uppercase;color:var(--rosewood);opacity:.85}
-@media (max-width:980px){.logo-name{font-size:2.35rem}.logo svg{width:44px;height:44px}}
-@media (max-width:440px){.logo{gap:9px}.logo-name{font-size:2rem}.logo svg{width:38px;height:38px}.logo-sub{font-size:.56rem;letter-spacing:.26em}}
+.logo-txt{gap:0}
+.logo-sub{
+  font-family:var(--script);font-size:1.85rem;font-weight:400;line-height:1;letter-spacing:0;text-transform:none;
+  justify-self:start;margin:-.12em 0 0 .9em;padding:.05em .2em .2em .05em;transform:rotate(-5deg);transform-origin:left center;
+  background:linear-gradient(100deg,#7a5634 0%,#b98e5a 40%,#ecd3a0 58%,#c39a64 74%,#8f6a40 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 1px 0 #6e4f2c) drop-shadow(0 3px 4px rgba(70,46,22,.25))
+}
+@media (max-width:980px){.logo-name{font-size:2.35rem}.logo svg{width:44px;height:44px}.logo-sub{font-size:1.65rem}}
+@media (max-width:440px){.logo{gap:9px}.logo-name{font-size:2rem}.logo svg{width:38px;height:38px}.logo-sub{font-size:1.45rem}}
 @media (prefers-reduced-motion:reduce){.logo-name{animation:none}}
 
 /* Header */
@@ -243,7 +250,7 @@ p{margin:0}
 .footer{background:var(--espresso-2);color:#cdbbb7;padding-block:56px calc(36px + env(safe-area-inset-bottom,0px));font-size:.9rem}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:32px}
 .footer .logo-name{background-image:linear-gradient(100deg,#c98a80 0%,#f0c3b6 22%,#fff1ea 36%,#e2a39b 52%,#f6d6cb 72%,#c98a80 100%);filter:drop-shadow(0 1px 0 #3a2324) drop-shadow(0 2px 0 #241617) drop-shadow(0 6px 10px rgba(0,0,0,.35))}
-.footer .logo-sub{color:#e2a39b}
+.footer .logo-sub{background-image:linear-gradient(100deg,#c9a26a 0%,#ecd3a0 35%,#fff0cf 55%,#d8b47a 75%,#b88d55 100%);filter:drop-shadow(0 1px 0 #241617) drop-shadow(0 3px 5px rgba(0,0,0,.35))}
 .footer .logo svg{color:var(--rose)}
 .foot-grid h4{margin:0 0 14px;color:#fff;font:500 .95rem var(--sans)}
 .foot-grid ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
